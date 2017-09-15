@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <script src="../js/lib/jquery-2.1.4.js"></script>
+    <script src="../js/lib/jquery.cookie.js"></script>
+
+    <script>
+        $.cookie("gender", "男"); //1.设置一个会话cookie
+        $.cookie("emial", "1123", { //2.设置一个长期cookie
+            expires: 0.5
+        });
+
+        console.log($.cookie("gender")); //3.获取一个cookie值
+        $.removeCookie("gender") //4.移除cookie值
+    </script>
+</body>
+
+</html>

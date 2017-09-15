@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        console.log(document.cookie); //获取cookie值
+        function getCookieByKey(key) {
+            var result;
+            var arr = document.cookie.split("; "); //1、把document.cookie分割成字符串数组
+            arr.forEach(function (value) {
+                // if (value.indexOf(key + "=") == 0) {
+                //     var len = (key + "=").length;    
+                //     result = value.substring(len);
+                // }
+                var keyValues = value.split("=");
+                if (keyValues[0] == key) { // 第一个元素就是键，第二个元素就是值
+                    result = keyValues[1];
+                }
+            })
+            return result;
+        }
+        var id = getCookieByKey("id");
+        var name = getCookieByKey("name");
+        console.log(id);
+        console.log(name);
+    </script>
+</body>
+
+</html>

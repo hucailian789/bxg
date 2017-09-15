@@ -1,0 +1,41 @@
+<!-- 面板 -->
+<div class="panel panel-default">
+    <div class="panel-body">
+        <!-- 导航路径 -->
+        <ol class="breadcrumb">
+            <li><a href="#">分类管理 </a></li>
+            <li class="active">分类列表</li>
+        </ol>
+        <div class="row">
+            <div class="col-md-1 col-md-offset-10">
+                <botton class="btn btn-success btn-add">添加分类</botton>
+            </div>
+        </div>
+        <table class="table table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th>分类名称</th>
+                    <th>课程数量</th>
+                    <th>是否显示</th>
+                    <th>排序</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- v相当于是$value -->
+                {{each result v}}
+                <!-- 把背景着色只须要给tr加个类名 -->
+                <tr class="{{v.cg_pid ==0? 'info':''}}">
+                    <td>{{v.cg_name}}</td>
+                    <td>{{v.cg_pid}}</td>
+                    <td>{{v.cg_is_hide=="1"?"隐藏":"显示"}}</td>
+                    <td>{{v.cg_order}}</td>
+                    <td cg_id="{{v.cg_id}}">
+                        <button class="btn btn-primary btn-edit">编辑</button>
+                    </td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
+</div>
