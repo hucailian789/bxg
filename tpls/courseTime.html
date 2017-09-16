@@ -9,9 +9,9 @@
                 <botton class="btn btn-success btn-add">添加课时</botton>
             </div>
         </div>
-        <div class="list-group">
-            <div class="list-group-item disabled">课程基本信息</div>
-            <div class="list-group-item">
+        <div class="panel panel-default">
+            <div class="panel-heading">课程基本信息</div>
+            <div class="panel-body">
                 <div class="media">
                     <div class="media-left">
                         <a href="javascript:void(0)" class="link-image" cs_id="{{cs_id}}">
@@ -24,7 +24,9 @@
                     </div>
                 </div>
             </div>
-            <div class="list-group-item disabled">课时信息</div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">课时信息</div>
             <table class="table table-bordered table-hover">
                 <thead>
                     <tr>
@@ -40,7 +42,7 @@
                         <td>{{$value.ct_id}}</td>
                         <td>{{$value.ct_name}}</td>
                         <td>{{$value.ct_video_duration}}</td>
-                        <td tc_id="{{$value.ct_id}}">
+                        <td ct_id="{{$value.ct_id}}">
                             <button class="btn btn-primary btn-edit">编辑</button>
                         </td>
                     </tr>

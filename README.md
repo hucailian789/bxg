@@ -144,3 +144,114 @@ bxg/
 
 编辑讲师步骤:
 找到功能入口,编辑讲师按钮,给按钮绑定点击事件,给每一个编辑按钮指定一个类名:btn-edit .事件绑定在div.panel中,通过事件委托让编辑按钮触发.当事件触发的时候,弹出模态框.准备一个模态框的模板.通过text插件获取模板内容.通过ajax获取讲师原来的数据.
+
+9.ajax里面嵌套ajax在什么情况下会用: 有2种数据来自于2个接口,而这些数据都要一起渲染到同一个模板中.就要使用嵌套.所以要把一个ajax的返回值放到另外一个ajax的返回值里面.
+    $.ajax({
+        url:"第一个路径",    //获取基本信息
+        success:function(resOld){
+            $.ajax({
+                url:"第二个路径",    //获取上级分类信息
+                success:function(res){
+                    //本来只需要渲染上级分类,所以传入res渲染一下,但是还有一个数据resOld,也要渲染上去.解决方案有2种: 把2个数据放到一起.
+                        a. {old:resOld.result, top:res} 这样写不好,影响了之前的代码格式
+                        b. 把resOld里面的数据放置到res中: res.old = resOld.result;这时候不仅可以获取上级分类,还能获取到分类原来的基本信息.原来的基本就通过old来获取. {{old.tc_name}}
+                    var html = template.render(catEditTpl.res);
+                }
+            })
+        }
+    })
+
+10.入口函数 创建出的来DOM元素是指向不同的内存地址.
+ var $1 = $("<input/>");
+ var $2 = $("<input/>");
+ console.log($1[0] == $2[0]);//false  
+
+11.jquery自己写的插件,叫做二次开发.
+    1.工具类的方法: $.cookie  $.fn = function(){} --调用$.fn();
+    2.Dom操作方法: $().modal();  $().css();
+        $.fn.myModal = function(){}---调用 $().myModal();
+
+12.- 下拉框联动
+	- 需求：选择第一个下拉框里面的某一项，从而改变第二个下拉框中的内容
+	
+	- 事件绑定：给第一个分类的下拉框绑定change事件
+
+
+	- 根据选中的该项的内容决定第二个下拉框的内容
+		- 获取该项的内容：$(this).val();
+		- 如何根据该项的内容获取第二项的内容(数据-->服务器)：
+			- ajax请求：/api/category/child
+	- 把第二项的内容更新到页面中
+		- 动态拼接DOM元素
+
+13、上传课程图片
+- 找到功能的入口：点击课程列表中的图片
+	- 给图片绑定事件
+		- 事件绑定在容器中，通过事件委托让a触发
+			-->容器应该是一个会被删除的容器，千万不要绑定在body/.main
+- 事件触发的时候，进入到课程图片模块，渲染出课程图片页面
+	- 1、页面的结构
+		- 准备一个课程图片的模板文件，通过text插件获取模板内容
+	- 2、页面的数据
+		- 通过ajax获取相应的接口
+			- 参数：cs_id
+	- 3、把数据放到页面中：使用arttemplate编译模板，获取真实内容
+	- 4、把真实的内容渲染到页面指定位置
+
+14.退出功能分析
+    1.从index.html跳转到login.html
+    2.如果只有跳转,那么用户还可以随意进入index.html
+        正确的逻辑:退出时,解除登录状态
+             前端:要做的是清除cookie  让用户不能直接进入index.html
+             如果前端要删除session值必须发送ajax请求.
+             后端:要做的是清除session 服务器端是通过session判断用户权限的
+
+步骤: a.找到功能入口:点击退出按钮
+        给按钮绑定单击事件.按钮是在index.html直接渲染的,所以js代码应该写在main.js中
+      b.事件触发的时候:
+            1.清除session--发送ajax请求
+            2.清除cookie  用$.removeCookie("cookie值")方法
+            3.页面跳转
+
+15.个人中心分析
+    1.找到功能入口:点击个人中心
+        给按钮绑定点击事件,弹出模态框,
+            a.页面布局
+            b.准备数据
+            c.把数据放到页面中
+            d.把真实内容以模态框呈现在页面中
+    2.提交表单
+        把表单变成异步的表单,给表单绑定submit事件, e.preventDafault();
+        获取表单数据 var formData = $(this).serialize();
+        通过ajax方法提交表单
+            成功之后,修改cookie值, 然后再刷新页面.
+            怎么修改cookie值,首先要自己去获取一下cookie值,从formData中找到tc_name值
+            function getName(formData){
+                var datas = formData.split("&");    这里面得到的是字符串以&号连接的
+                datas.forEach(function(v){           找到tc_name开头的那个
+                    var keyValues = v.split("=");
+                    var key = keyValues[0];
+                    var value = keyValus[1];
+                    if(key == "tc_name"){
+                        result
+                    }
+                })
+            }
+
+var tc_name = getName(formData);
+var userInfoStr = $.cookie("userInfo");     获取原来的cookie值
+var userInfoStr = JSON.parse( userInfoStr);  2、把原来的cookie值反序列化为JSON象
+userInfoObj.tc_name = tc_name;  3、修改对象中的tc_name属性
+userInfoStr = JSON.stringify(userInfoObj); 4、把全新的对象序列化为一个JSON数据
+$.cookie("userInfo",userInfoStr);   5、把新的JSON数据存储到cookie中
+    
+location.reload();         //真刷新
+rich text editor：富文本编辑器
+
+ //添加到页面中之后再去渲染富文本编辑器
+var ue = UE.getEditor('introduceContainer');
+ue.ready(function(){
+    ue.setContent(res.result.tc_introduce);     //富文本框里面的内容只能手动添加到页面上去
+})
+
+16.Echarts插件--百度基于canvas开发的.类似的还有highcharts
